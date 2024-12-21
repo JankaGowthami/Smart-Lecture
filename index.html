@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Recorder</title>
+    <style>
+        /* Basic reset and box sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Main container */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        h1 {
+            color: #4e73df;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        /* Button Styles */
+        button {
+            background-color: #4e73df;
+            color: white;
+            font-size: 1.1rem;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #2e59d9;
+        }
+
+        /* Transcription & Summary Text */
+        h3 {
+            color: #4e73df;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            padding: 10px;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 100px;
+        }
+
+        /* Spacing between elements */
+        .content {
+            margin-top: 30px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            button {
+                width: 100%;
+                padding: 14px;
+            }
+        }
+    </style>
+    <script>
+        async function transcribeSpeech() {
+            const response = await fetch('/transcribe', { method: 'POST' });
+            const result = await response.json();
+            if (result.transcription) {
+                document.getElementById("transcription").textContent = result.transcription;
+            } else {
+                alert("Transcription failed!");
+            }
+        }
+
+        async function summarizeText() {
+            const response = await fetch('/summarize', { method: 'POST' });
+            const result = await response.json();
+            if (result.summary) {
+                document.getElementById("summary").textContent = result.summary;
+            } else {
+                alert("Summarization failed!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Lecture Recorder</h1>
+        <button onclick="transcribeSpeech()">Start Recording</button>
+
+        <div class="content">
+            <h3>Transcription:</h3>
+            <p id="transcription">Your transcription will appear here.</p>
+
+            <button onclick="summarizeText()">Generate Summary</button>
+
+            <h3>Summary:</h3>
+            <p id="summary">Your summary will appear here.</p>
+        </div>
+    </div>
+</body>
+</html>
